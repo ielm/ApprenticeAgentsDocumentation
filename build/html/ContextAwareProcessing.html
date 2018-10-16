@@ -1,0 +1,187 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Context Aware Processing &#8212; Apprentice Agents 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="context-aware-processing">
+<h1>Context Aware Processing<a class="headerlink" href="#context-aware-processing" title="Permalink to this headline">¶</a></h1>
+<p>Agents receive stimuli in the form of TMRs - typically from utterances, although not necessarily so.  These TMRs are entered into the short-term fact repository, where they are resolved against other known instances if possible, otherwise added as new knowledge.</p>
+<p>Inputs, however, need to be processed and understood within a broader context.  It is not simply enough to dump every TMR frame into the fact repository; even resolving to existing instances doesn’t lend enough intelligence to understanding the inputs fully.</p>
+<p>To more fully grasp the stream of inputs, an agent uses Context Aware Processing; through external stimuli or internal decision making, an agent finds itself in one or more contexts.  These contexts can vary - in the case of the robot demo, the context (in English) is “being taught a complex task”.</p>
+<div class="section" id="contexts">
+<h2>Contexts<a class="headerlink" href="#contexts" title="Permalink to this headline">¶</a></h2>
+<p>A context enables the agent to process inputs in a specialized fashion.  In brief, a context is:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><dl class="first docutils">
+<dt>A series of heuristics (pre-FR resolution, post-FR resolution, and additional FR resolution)</dt>
+<dd><ul class="first last">
+<li>pre-FR resolution heuristics are run prior to input being resolved to the FR; these heuristics can declare that any of the remaining two stages of agent learning (FR resolution and post-FR processing) should be skipped</li>
+<li>post-FR resolution heuristics are run after the input has been resolved to the FR (these heuristics can be logically ordered to be semi-dependent on one another; that is, “sub” heuristics can be triggered from another heuristic)</li>
+<li>Additional FR heuristics are heuristics that are injected into the default set of heuristics used by the FR to perform normal resolution</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>A collection of meta-contextual properties for use in the FR</li>
+<li>A collection of static knowledge modifications that are only applicable while in the context</li>
+</ol>
+</div></blockquote>
+<p>Both the heuristics and the meta-contextual properties interact with each other to create a state for the context as the agent observes its reality.</p>
+<p>Meta-contextual properties are essentially an extension of the ontology that defines a new set of properties whose usage is relevant only within a certain context.  These are not “official” properties of the ontology, but they are a set of properties well defined within a context to have specific meanings.</p>
+<p>Heuristics will then read, write, and update these meta-contextual properties into the FR as a means of tracking the state of the context.  We use a unique namespace to track these properties in the context (to avoid collisions with other contexts), and we use the “*” symbol to identify these properties uniquely from traditional properties found on FR instances.</p>
+<p>Static knowledge modifications (lexicon, ontology, etc.) can be used to help with textual domain processing, as well as contextual reference resolution in the fact repository.</p>
+</div>
+<div class="section" id="an-example">
+<h2>An Example<a class="headerlink" href="#an-example" title="Permalink to this headline">¶</a></h2>
+<p>In the context “being taught a complex task”, a subset of the defined meta-properties is:</p>
+<blockquote>
+<div><ul class="simple">
+<li>LCT.learning - This is applied to EVENTs that the agent is learning about (still learning, not yet finished learning); (values are True, or False, where False is equivalent to absence of the property)</li>
+<li>LCT.current - This is applied to an EVENT that has LCT.learning, and is the current focus of the learning effort (in a complex event, this is the current subtree that is being explained); (values are True, or False, where False is equivalent to absence of the property)</li>
+<li>LCT.waiting_on - This is applied to a non-LCT.current EVENT that has LCT.learning, and its value is another EVENT that is considered a subevent, and is not yet finished being learned</li>
+<li>LCT.learned - …</li>
+</ul>
+</div></blockquote>
+<p>(Here, the namespace “LCT” is used as an abbreviation for “learning a complex task”).</p>
+<p>And a simple heuristic for learning about a new EVENT, and adding subevents to it would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DEFINE</span> <span class="n">LCT_SIMPLE_HEURISTIC</span> <span class="p">(</span><span class="n">tmr</span><span class="p">,</span> <span class="n">fr</span><span class="p">)</span> <span class="n">AS</span>
+
+<span class="n">event</span> <span class="o">=</span> <span class="n">main_event</span><span class="p">(</span><span class="n">tmr</span><span class="p">)</span>
+<span class="n">fr_event</span> <span class="o">=</span> <span class="n">corresponding_fr_frame</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">fr</span><span class="p">)</span>
+
+<span class="n">IF</span> <span class="n">is_prefix</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+    <span class="n">FOR</span> <span class="n">EACH</span> <span class="n">e</span> <span class="n">IN</span> <span class="n">find_fr_frames</span><span class="p">(</span><span class="n">LCT</span><span class="o">.</span><span class="n">learning</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">e</span><span class="o">-&gt;</span><span class="n">LCT</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">e</span><span class="o">-&gt;</span><span class="n">waiting_on</span> <span class="o">=</span> <span class="n">fr_event</span>
+        <span class="n">e</span><span class="o">-&gt;</span><span class="n">HAS</span><span class="o">-</span><span class="n">EVENT</span><span class="o">-</span><span class="n">AS</span><span class="o">-</span><span class="n">PART</span> <span class="o">=</span> <span class="n">fr_event</span>
+    <span class="n">fr_event</span><span class="o">-&gt;</span><span class="n">LCT</span><span class="o">.</span><span class="n">learning</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">fr_event</span><span class="o">-&gt;</span><span class="n">LCT</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Where:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">main_event</span></code> is a subroutine to find the “main” or “head” EVENT frame in a TMR</li>
+<li><code class="docutils literal notranslate"><span class="pre">corresponding_fr_frame</span></code> is a subroutine to find the FR frame generated by a TMR frame (previor to any Context Aware Processing)</li>
+<li><code class="docutils literal notranslate"><span class="pre">is_prefix</span></code> is a subroutine for determining the anchor time of an EVENT frame (testing for, e.g., “we will” rather than “we have”)</li>
+<li><code class="docutils literal notranslate"><span class="pre">find_fr_frames</span></code> is a subroutine to search the FR for matching frames (in this case, to find ones with the LCT.learning property set to True)</li>
+</ul>
+</div></blockquote>
+<p>Assuming an empty FR, if two input TMRs (containing only a simple EVENT frame each) were input, one after the other, the state of the FR after the first input would look like:</p>
+<p><code class="docutils literal notranslate"><span class="pre">EVENT-FR1</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">*LCT.learning</span> <span class="pre">=</span> <span class="pre">True</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">*LCT.current</span> <span class="pre">=</span> <span class="pre">True</span></code></li>
+</ul>
+</div></blockquote>
+<p>And the state of the FR after the second input (assuming the FR does not resolve the two EVENTs to the same frame) would look like:</p>
+<p><code class="docutils literal notranslate"><span class="pre">EVENT-FR1</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">HAS-EVENT-AS-PART</span> <span class="pre">=</span> <span class="pre">EVENT-FR2</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">*LCT.learning</span> <span class="pre">=</span> <span class="pre">True</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">*LCT.current</span> <span class="pre">=</span> <span class="pre">False</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">*LCT.waiting_on</span> <span class="pre">=</span> <span class="pre">EVENT-FR2</span></code></li>
+</ul>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">EVENT-FR2</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">*LCT.learning</span> <span class="pre">=</span> <span class="pre">True</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">*LCT.current</span> <span class="pre">=</span> <span class="pre">True</span></code></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Apprentice Agents</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="AgentHeuristics.html">Agent Heuristics</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Jesse English & Ivan Leon.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.9</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      
+      |
+      <a href="_sources/ContextAwareProcessing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
