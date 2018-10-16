@@ -4,11 +4,12 @@ Apprentice Agents Project Documentation
 Contents:
 ^^^^^^^^^
 .. toctree::
+   :caption: Project Documentation
    :maxdepth: 2
 
    LEIAServices
-   ContextAwareProcessing
-   AgentHeuristics
+   agent/ContextAwareProcessing
+   agent/AgentHeuristics
 
 Indices and tables
 ==================
