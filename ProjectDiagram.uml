@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#/Users/ivan/PycharmProjects/apprenticeagentstasktrees/backend/agent.py</OriginalElement>
+  <nodes>
+    <node x="554.0" y="167.0">backend.models.tmr.TMR</node>
+    <node x="248.0" y="1604.0">backend.heuristics.fr_heuristics.FRResolutionHeuristic</node>
+    <node x="33.5" y="146.0">backend.agent.Agent</node>
+    <node x="1339.0" y="903.0">backend.models.query.SlotQuery</node>
+    <node x="455.0" y="1519.0">backend.contexts.context.RootUnderstandingProcessor</node>
+    <node x="0.0" y="1508.0">backend.contexts.context.FRResolutionUnderstandingProcessor</node>
+    <node x="0.0" y="0.0">backend.models.graph.Network</node>
+    <node x="294.0" y="903.0">backend.models.query.ExactQuery</node>
+    <node x="0.0" y="1004.0">backend.models.query.SimpleFrameQuery</node>
+    <node x="255.25" y="1363.0">backend.contexts.context.UnderstandingProcessor</node>
+    <node x="882.0" y="1363.0">backend.models.graph.Filler</node>
+    <node x="670.0" y="1604.0">backend.models.graph.Literal</node>
+    <node x="241.0" y="1278.0">backend.models.ontology.OntologyFrame</node>
+    <node x="324.0" y="608.0">backend.contexts.LCTContext.LCTContext</node>
+    <node x="556.0" y="1267.0">backend.models.tmr.TMRInstance</node>
+    <node x="21.0" y="903.0">backend.models.query.FrameQuery</node>
+    <node x="766.0" y="167.0">backend.models.fr.FR</node>
+    <node x="277.0" y="200.0">backend.models.ontology.Ontology</node>
+    <node x="169.5" y="463.0">backend.contexts.context.AgentContext</node>
+    <node x="0.0" y="1267.0">backend.models.fr.FRInstance</node>
+    <node x="0.0" y="652.0">backend.contexts.ACTContext.ACTContext</node>
+    <node x="699.5" y="792.0">backend.models.query.Query</node>
+    <node x="813.0" y="903.0">backend.models.query.FillerQuery</node>
+    <node x="280.0" y="1078.0">backend.models.graph.Frame</node>
+    <node x="0.0" y="1604.0">backend.models.graph.Slot</node>
+    <node x="1079.0" y="903.0">backend.models.query.AndQuery</node>
+    <node x="542.0" y="0.0">backend.models.graph.Graph</node>
+    <node x="1137.0" y="1363.0">backend.models.graph.Identifier</node>
+    <node x="563.0" y="903.0">backend.models.query.OrQuery</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="backend.models.ontology.OntologyFrame" target="backend.models.graph.Frame">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="69.5" />
+    </edge>
+    <edge source="backend.contexts.context.FRResolutionUnderstandingProcessor" target="backend.contexts.context.UnderstandingProcessor">
+      <point x="0.0" y="-25.5" />
+      <point x="217.5" y="1483.0" />
+      <point x="343.5" y="1483.0" />
+      <point x="-88.25" y="47.5" />
+    </edge>
+    <edge source="backend.agent.Agent" target="backend.models.graph.Network">
+      <point x="0.0" y="-136.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="backend.contexts.LCTContext.LCTContext" target="backend.contexts.context.AgentContext">
+      <point x="0.0" y="-69.5" />
+      <point x="474.0" y="583.0" />
+      <point x="384.75" y="583.0" />
+      <point x="71.75" y="47.5" />
+    </edge>
+    <edge source="backend.models.fr.FRInstance" target="backend.models.graph.Frame">
+      <point x="0.0" y="-25.5" />
+      <point x="110.5" y="1242.0" />
+      <point x="316.1666666666667" y="1242.0" />
+      <point x="-72.33333333333331" y="69.5" />
+    </edge>
+    <edge source="backend.models.query.SlotQuery" target="backend.models.query.Query">
+      <point x="-5.6843418860808015E-14" y="-25.5" />
+      <point x="1458.5" y="863.0" />
+      <point x="896.5833333333334" y="863.0" />
+      <point x="89.58333333333337" y="25.5" />
+    </edge>
+    <edge source="backend.models.tmr.TMRInstance" target="backend.models.graph.Frame">
+      <point x="0.0" y="-25.5" />
+      <point x="678.5" y="1242.0" />
+      <point x="460.8333333333333" y="1242.0" />
+      <point x="72.33333333333331" y="69.5" />
+    </edge>
+    <edge source="backend.models.query.OrQuery" target="backend.models.query.Query">
+      <point x="0.0" y="-25.5" />
+      <point x="678.0" y="883.0" />
+      <point x="789.0833333333334" y="883.0" />
+      <point x="-17.91666666666663" y="25.5" />
+    </edge>
+    <edge source="backend.contexts.context.RootUnderstandingProcessor" target="backend.contexts.context.UnderstandingProcessor">
+      <point x="0.0" y="-14.5" />
+      <point x="646.0" y="1483.0" />
+      <point x="520.0" y="1483.0" />
+      <point x="88.25" y="47.5" />
+    </edge>
+    <edge source="backend.models.fr.FR" target="backend.models.graph.Graph">
+      <point x="0.0" y="-58.5" />
+      <point x="850.0" y="142.0" />
+      <point x="722.0" y="142.0" />
+      <point x="72.0" y="58.5" />
+    </edge>
+    <edge source="backend.models.query.FrameQuery" target="backend.models.query.Query">
+      <point x="0.0" y="-25.5" />
+      <point x="147.5" y="863.0" />
+      <point x="717.4166666666666" y="863.0" />
+      <point x="-89.58333333333337" y="25.5" />
+    </edge>
+    <edge source="backend.models.ontology.Ontology" target="backend.models.graph.Graph">
+      <point x="0.0" y="-25.5" />
+      <point x="405.5" y="142.0" />
+      <point x="578.0" y="142.0" />
+      <point x="-72.0" y="58.5" />
+    </edge>
+    <edge source="backend.models.query.FillerQuery" target="backend.models.query.Query">
+      <point x="0.0" y="-25.5" />
+      <point x="936.0" y="883.0" />
+      <point x="824.9166666666666" y="883.0" />
+      <point x="17.91666666666663" y="25.5" />
+    </edge>
+    <edge source="backend.contexts.ACTContext.ACTContext" target="backend.contexts.context.AgentContext">
+      <point x="0.0" y="-25.5" />
+      <point x="152.0" y="583.0" />
+      <point x="241.25" y="583.0" />
+      <point x="-71.75" y="47.5" />
+    </edge>
+    <edge source="backend.models.query.ExactQuery" target="backend.models.query.Query">
+      <point x="0.0" y="-25.5" />
+      <point x="418.5" y="873.0" />
+      <point x="753.25" y="873.0" />
+      <point x="-53.75" y="25.5" />
+    </edge>
+    <edge source="backend.models.tmr.TMR" target="backend.models.graph.Graph">
+      <point x="0.0" y="-58.5" />
+      <point x="0.0" y="58.5" />
+    </edge>
+    <edge source="backend.models.query.AndQuery" target="backend.models.query.Query">
+      <point x="0.0" y="-25.5" />
+      <point x="1199.0" y="873.0" />
+      <point x="860.75" y="873.0" />
+      <point x="53.75" y="25.5" />
+    </edge>
+    <edge source="backend.models.query.SimpleFrameQuery" target="backend.models.query.FrameQuery">
+      <point x="0.0" y="-14.5" />
+      <point x="0.0" y="25.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9338097662833986" x="1094.9981642804469" y="934.1439236750762" />
+  <SelectedNodes>
+    <node>backend.models.query.AndQuery</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+
