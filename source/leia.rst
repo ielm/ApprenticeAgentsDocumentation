@@ -10,6 +10,7 @@ The architecture is built around the premise of “micro-services”, that is, e
 Service Stack
 ^^^^^^^^^^^^^
 The architecture stack consists primarily of two parts:
+
 1. Service Layer - this is any given running service; it will be running on a machine, likely the local one, on a particular port, and will have a series of endpoints that can be reached to request data or processing.  Services for static knowledge will also have both a manager and an editor (see below).  Finally, some services may have requirements (such as databases, etc.) that will be considered part of their deployment.
 2. API Wrapper Layer - for any given service, there will also be a common library of python methods that “wrap” the service, obfuscating the network connections into simple function calls.  This should be considered the “SDK” - development that needs something from a service should use the appropriate method in the wrapper to accomplish the task, rather than sending a message directly to the service.
 
