@@ -58,7 +58,7 @@ Where:
     - ``is_prefix`` is a subroutine for determining the anchor time of an EVENT frame (testing for, e.g., “we will” rather than “we have”)
     - ``find_fr_frames`` is a subroutine to search the FR for matching frames (in this case, to find ones with the LCT.learning property set to True)
 
-Assuming an empty FR, if two input TMRs (containing only a simple EVENT frame each) were input, one after the other, the state of the FR after the first input would look like::
+Assuming an empty FR, if two input TMRs (containing only a simple EVENT frame each) were input, one after the other, the state of the FR after the first input would look like:
 
 ``EVENT-FR1``
 
