@@ -3,7 +3,6 @@ LEIA Services
 
 Introduction
 ^^^^^^^^^^^^
-
 The LEIA Services architecture is designed to enable rapid deployment and ease-of-use for a variety of systems and knowledge resources needed for various experimentation.
 
 The architecture is built around the premise of “micro-services”, that is, each individual component is a self-contained service that may speak to other such services on the same machine as needed.  Each service can be enabled or disabled independently, and in fact, multiple versions of the same service can be run simultaneously if desired.
