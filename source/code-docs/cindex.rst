@@ -1,3 +1,6 @@
+Core
+====
+
 ..  toctree::
     :caption: Core
     :maxdepth: 2
@@ -5,6 +8,8 @@
     agent
     service
 
+Contexts
+========
 
 ..  toctree::
     :caption: Contexts
@@ -13,6 +18,9 @@
     contexts/context
     contexts/ACTContext
     contexts/LCTContext
+
+Heuristics
+==========
 
 ..  toctree::
     :caption: Heuristics
@@ -24,6 +32,8 @@
     heuristics/lctcontext/lct_pre_heuristics
     heuristics/lctcontext/lct_post_heuristics
 
+Models
+======
 
 ..  toctree::
     :caption: Models
@@ -43,11 +53,17 @@
     models/tmr
     models/view
 
+Services
+========
+
 ..  toctree::
     :caption: Services
     :maxdepth: 2
 
     services/environment
+
+Utils
+=====
 
 ..  toctree::
     :caption: Utils

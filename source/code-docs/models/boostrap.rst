@@ -1,5 +1,7 @@
-Bootsrap
-========
+Bootstrap
+=========gi
 
-..  automodule:: Bootstrap
+
+
+..  automodule:: bootstrap
     :members:

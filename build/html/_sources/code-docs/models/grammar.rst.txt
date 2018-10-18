@@ -1,5 +1,5 @@
 Grammar
 ========
 
-..  automodule:: Bootstrap
+..  automodule:: grammar
     :members:

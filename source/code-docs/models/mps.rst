@@ -1,0 +1,5 @@
+MPS
+===
+
+..  automodule:: mps
+    :members:

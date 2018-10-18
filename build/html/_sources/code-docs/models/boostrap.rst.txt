@@ -1,5 +1,5 @@
-Bootsrap
-========
+Bootstrap
+=========
 
-..  automodule:: Bootstrap
+..  automodule:: bootstrap
     :members:

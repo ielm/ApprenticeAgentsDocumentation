@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; Apprentice Agents 1.0.0 documentation</title>
+  <title>Core &mdash; Apprentice Agents 1.0.0 documentation</title>
   
 
   
@@ -88,25 +88,52 @@
 <li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Code Documentation</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="agent.html">Agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="service.html">Service</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contexts/context.html">Context</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contexts/ACTContext.html">ACTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contexts/LCTContext.html">LCTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="heuristics/actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="heuristics/lctcontext/lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="heuristics/lctcontext/lct_fr_resolution_heuristics.html">LCT FR Resolution Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="heuristics/lctcontext/lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="heuristics/lctcontext/lct_post_heuristics.html">LCT Post Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models/agenda.html">Agenda</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models/fr.html">Fact Repository</a></li>
-<li class="toctree-l1"><a class="reference internal" href="models/grammar.html">Grammar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="services/environment.html">Environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils/AgentLogger.html">Agent Logger</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils/AtomicCounter.html">Atomic Counter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils/FRUtils.html">FR Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils/YaleUtils.html">Yale Utils</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="agent.html">Agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="service.html">Service</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#contexts">Contexts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contexts/context.html">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexts/ACTContext.html">ACTContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contexts/LCTContext.html">LCTContext</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#heuristics">Heuristics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="heuristics/actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heuristics/lctcontext/lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heuristics/lctcontext/lct_fr_resolution_heuristics.html">LCT FR Resolution Heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heuristics/lctcontext/lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heuristics/lctcontext/lct_post_heuristics.html">LCT Post Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#models">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/agenda.html">Agenda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/fr.html">Fact Repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/grammar.html">Grammar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/graph.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/mps.html">MPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/ontology.html">Ontology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/path.html">Path</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/query.html">Query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/statement.html">Statement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/syntax.html">Syntax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/tmr.html">Text Meaning Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#services">Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="services/environment.html">Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#utils">Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils/AgentLogger.html">Agent Logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/AtomicCounter.html">Atomic Counter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/FRUtils.html">FR Utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/YaleUtils.html">Yale Utils</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">Help</span></p>
 <ul>
@@ -156,7 +183,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>&lt;no title&gt;</li>
+      <li>Core</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -175,13 +202,18 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="toctree-wrapper compound">
+  <div class="section" id="core">
+<h1>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Core</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="agent.html">Agent</a></li>
 <li class="toctree-l1"><a class="reference internal" href="service.html">Service</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="contexts">
+<h1>Contexts<a class="headerlink" href="#contexts" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contexts</span></p>
 <ul>
@@ -190,6 +222,9 @@
 <li class="toctree-l1"><a class="reference internal" href="contexts/LCTContext.html">LCTContext</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="heuristics">
+<h1>Heuristics<a class="headerlink" href="#heuristics" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Heuristics</span></p>
 <ul>
@@ -200,20 +235,38 @@
 <li class="toctree-l1"><a class="reference internal" href="heuristics/lctcontext/lct_post_heuristics.html">LCT Post Heuristics</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="models">
+<h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Models</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="models/agenda.html">Agenda</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models/fr.html">Fact Repository</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models/grammar.html">Grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/graph.html">Graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/mps.html">MPS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/ontology.html">Ontology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/path.html">Path</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/query.html">Query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/statement.html">Statement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/syntax.html">Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/tmr.html">Text Meaning Representation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models/view.html">View</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="services">
+<h1>Services<a class="headerlink" href="#services" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Services</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="services/environment.html">Environment</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="utils">
+<h1>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Utils</span></p>
 <ul>
@@ -222,6 +275,7 @@
 <li class="toctree-l1"><a class="reference internal" href="utils/FRUtils.html">FR Utils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils/YaleUtils.html">Yale Utils</a></li>
 </ul>
+</div>
 </div>
 
 

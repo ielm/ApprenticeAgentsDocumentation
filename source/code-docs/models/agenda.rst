@@ -1,5 +1,5 @@
 Agenda
 ======
 
-..  automodule:: Agenda
+..  automodule:: agenda
     :members:
