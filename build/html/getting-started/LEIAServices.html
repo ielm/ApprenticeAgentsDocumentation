@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>LEIA Services &mdash; Apprentice Agents 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Agent Heuristics" href="../agent-capabilities/AgentHeuristics.html" />
+    <link rel="prev" title="Apprentice Agents Project Documentation" href="../index.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apprentice Agents
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">LEIA Services</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#service-stack">Service Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-service-and-using-docker">Running a Service and Using Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#static-knowledge-services">Static Knowledge Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accessing-the-wrappers-and-docker-compose-files">Accessing the Wrappers and Docker Compose Files</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Agent Capabilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Code Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/agent.html">Agent</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/service.html">Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/contexts/context.html">Context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/contexts/ACTContext.html">ACTContext</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/contexts/LCTContext.html">LCTContext</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/heuristics/actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/heuristics/lctcontext/lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/heuristics/lctcontext/lct_fr_resolution_heuristics.html">LCT FR Resolution Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/heuristics/lctcontext/lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/heuristics/lctcontext/lct_post_heuristics.html">LCT Post Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/models/agenda.html">Agenda</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/models/fr.html">Fact Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/models/grammar.html">Grammar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/services/environment.html">Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/utils/AgentLogger.html">Agent Logger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/utils/AtomicCounter.html">Atomic Counter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/utils/FRUtils.html">FR Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/utils/YaleUtils.html">Yale Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../help/help.html">Need Help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apprentice Agents</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>LEIA Services</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/getting-started/LEIAServices.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="leia-services">
+<h1>LEIA Services<a class="headerlink" href="#leia-services" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The LEIA Services architecture is designed to enable rapid deployment and ease-of-use for a variety of systems and knowledge resources needed for various experimentation.</p>
+<p>The architecture is built around the premise of “micro-services”, that is, each individual component is a self-contained service that may speak to other such services on the same machine as needed.  Each service can be enabled or disabled independently, and in fact, multiple versions of the same service can be run simultaneously if desired.</p>
+</div>
+<div class="section" id="service-stack">
+<h2>Service Stack<a class="headerlink" href="#service-stack" title="Permalink to this headline">¶</a></h2>
+<p>The architecture stack consists primarily of two parts:</p>
+<ol class="arabic simple">
+<li>Service Layer - this is any given running service; it will be running on a machine, likely the local one, on a particular port, and will have a series of endpoints that can be reached to request data or processing.  Services for static knowledge will also have both a manager and an editor (see below).  Finally, some services may have requirements (such as databases, etc.) that will be considered part of their deployment.</li>
+<li>API Wrapper Layer - for any given service, there will also be a common library of python methods that “wrap” the service, obfuscating the network connections into simple function calls.  This should be considered the “SDK” - development that needs something from a service should use the appropriate method in the wrapper to accomplish the task, rather than sending a message directly to the service.</li>
+</ol>
+</div>
+<div class="section" id="running-a-service-and-using-docker">
+<h2>Running a Service and Using Docker<a class="headerlink" href="#running-a-service-and-using-docker" title="Permalink to this headline">¶</a></h2>
+<p>Services themselves are built as python web applications.  They will have a main method which activates a web service (either using Flask or web.py).  Each service can be run on a given machine by simply running the main method - however, doing so does not guarantee that either the required resources (such as databases) are present, nor does it guarantee that the service won’t collide with another service (shared ports, for example).</p>
+<p>To manage these problems, we use Docker.  Docker is a system that allows services to be bundled up into “images” (a self-contained snapshot of what the service has - code and resources), and each image can be “turned on” by running it in a container (an isolated virtual machine).</p>
+<p>To support Docker, each service has a Docker compose file - this is essentially a script that tells Docker how to use the image, and how to set up an environment for that image to run safely in.  The compose file allows for required resources to be enabled, and environment variables to be mapped in the virtual machine (such as port numbers).</p>
+<p>As such, while running the service directly from the code is generally fine, and does allow for rapid changes to the service codebase itself, if the intent of a service on a machine is to consume it (use a knowledge editor, ask for processing etc.) it is far preferred to run the service via Docker with the associated compose file.</p>
+</div>
+<div class="section" id="static-knowledge-services">
+<h2>Static Knowledge Services<a class="headerlink" href="#static-knowledge-services" title="Permalink to this headline">¶</a></h2>
+<p>Services that specifically encapsulate a static knowledge resource will necessarily have at least one required resource (a database).  The service will expose an API for searching the knowledge resource (and a wrapper library will be provided for accessing the API).</p>
+<p>These services will also make use of a knowledge manager.  The manager is a light-weight user interface external to the knowledge editor.  The manager allows for the knowledge supplied by the service to be versioned and shared using a central hosted repository for that knowledge type.</p>
+</div>
+<div class="section" id="accessing-the-wrappers-and-docker-compose-files">
+<h2>Accessing the Wrappers and Docker Compose Files<a class="headerlink" href="#accessing-the-wrappers-and-docker-compose-files" title="Permalink to this headline">¶</a></h2>
+<p>For ease of access, all of the API Wrappers, and a wide collection of Docker Compose files are all found in the LEIAServices SVN repository.  Each compose file found has a description at the top as to what exactly it sets up.  There is one for each atomic service, and there are some that enable multiple services simultaneously.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../agent-capabilities/AgentHeuristics.html" class="btn btn-neutral float-right" title="Agent Heuristics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Apprentice Agents Project Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jesse English &amp; Ivan Leon
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'1.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
