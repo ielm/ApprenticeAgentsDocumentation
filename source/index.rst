@@ -11,8 +11,8 @@ Apprentice Agents Project Documentation
     :caption: Agent Capabilities
     :maxdepth: 2
 
-    agent-capabilities/AgentHeuristics
     agent-capabilities/ContextAwareProcessing
+    agent-capabilities/AgentHeuristics
 
 ..  toctree::
     :caption: Code Documentation

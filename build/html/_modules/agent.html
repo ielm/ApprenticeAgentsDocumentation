@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>agent &mdash; Apprentice Agents 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apprentice Agents
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/LEIAServices.html">LEIA Services</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Agent Capabilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Code Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#contexts">Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#heuristics">Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#models">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#services">Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#utils">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../help/help.html">Need Help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apprentice Agents</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>agent</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for agent</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">backend.contexts.LCTContext</span> <span class="k">import</span> <span class="n">LCTContext</span>
+<span class="kn">from</span> <span class="nn">backend.models.agenda</span> <span class="k">import</span> <span class="n">Action</span><span class="p">,</span> <span class="n">Agenda</span><span class="p">,</span> <span class="n">Goal</span>
+<span class="kn">from</span> <span class="nn">backend.models.fr</span> <span class="k">import</span> <span class="n">FR</span>
+<span class="kn">from</span> <span class="nn">backend.models.graph</span> <span class="k">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Network</span>
+<span class="kn">from</span> <span class="nn">backend.models.ontology</span> <span class="k">import</span> <span class="n">Ontology</span>
+<span class="kn">from</span> <span class="nn">backend.models.statement</span> <span class="k">import</span> <span class="n">Statement</span>
+<span class="kn">from</span> <span class="nn">backend.models.tmr</span> <span class="k">import</span> <span class="n">TMR</span>
+<span class="kn">from</span> <span class="nn">backend.utils.AgentLogger</span> <span class="k">import</span> <span class="n">AgentLogger</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<div class="viewcode-block" id="Agent"><a class="viewcode-back" href="../code-docs/agent.html#agent.Agent">[docs]</a><span class="k">class</span> <span class="nc">Agent</span><span class="p">(</span><span class="n">Network</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The agent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ontology</span><span class="p">:</span> <span class="n">Ontology</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize Agent</span>
+
+<span class="sd">        :param ontology:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">ontology</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;NYI, Default Ontology Required&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">exe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Statement</span><span class="o">.</span><span class="n">hierarchy</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">ontology</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">FR</span><span class="p">(</span><span class="s2">&quot;SELF&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wo_memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">FR</span><span class="p">(</span><span class="s2">&quot;WM&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lt_memory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">FR</span><span class="p">(</span><span class="s2">&quot;LT&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">identity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;ROBOT&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;INPUT-TMR&quot;</span><span class="p">,</span> <span class="n">generate_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bootstrap</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_memory</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_queue</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">LCTContext</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span> <span class="o">=</span> <span class="n">AgentLogger</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">logger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lt_memory</span><span class="o">.</span><span class="n">logger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span> <span class="o">=</span> <span class="n">logger</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span>
+
+    <span class="k">def</span> <span class="nf">input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="n">tmr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">TMR</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_memory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;Input: &#39;&quot;</span> <span class="o">+</span> <span class="n">tmr</span><span class="o">.</span><span class="n">sentence</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+        <span class="n">agenda</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">default_understanding</span><span class="p">()</span>
+        <span class="n">agenda</span><span class="o">.</span><span class="n">logger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="p">)</span>
+        <span class="n">agenda</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">idea</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PRE:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;I:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_decision</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;D:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;E:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_assess</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">IDEA</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">E</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="mi">3</span>
+
+        <span class="n">_stage</span> <span class="o">=</span> <span class="n">D</span>
+        <span class="n">_time</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">get_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">D</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Agent</span><span class="o">.</span><span class="n">_decision</span>
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">E</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Agent</span><span class="o">.</span><span class="n">_execute</span>
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">A</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Agent</span><span class="o">.</span><span class="n">_assess</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">D</span><span class="p">:</span>
+                <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">=</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">E</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">E</span><span class="p">:</span>
+                <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">=</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">A</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">A</span><span class="p">:</span>
+                <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">=</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">D</span>
+                <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_time</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">return</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">stage</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">D</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Decide&quot;</span>
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">E</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Execute&quot;</span>
+            <span class="k">if</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_stage</span> <span class="o">==</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">A</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s2">&quot;Assess&quot;</span>
+
+        <span class="nd">@classmethod</span>
+        <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">_time</span>
+
+    <span class="k">def</span> <span class="nf">iidea</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span> <span class="c1"># (I)ndependent (I)nput, (D)ecide + (E)xecute + (A)ssess</span>
+        <span class="k">global</span> <span class="n">iidea_stage</span>
+
+        <span class="k">if</span> <span class="nb">input</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_input</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+
+        <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">get_method</span><span class="p">()(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">advance</span><span class="p">()</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;T&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">Agent</span><span class="o">.</span><span class="n">IDEA</span><span class="o">.</span><span class="n">stage</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">TMR</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">input</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="nb">input</span> <span class="o">=</span> <span class="n">TMR</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">ontology</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ontology</span><span class="p">)</span>
+
+        <span class="n">tmr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;INPUT-TMR&quot;</span><span class="p">,</span> <span class="n">isa</span><span class="o">=</span><span class="s2">&quot;EXE.INPUT-TMR&quot;</span><span class="p">,</span> <span class="n">generate_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">frame</span><span class="p">[</span><span class="s2">&quot;REFERS-TO-GRAPH&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">(</span><span class="n">tmr</span><span class="o">.</span><span class="n">_namespace</span><span class="p">)</span>
+        <span class="n">frame</span><span class="p">[</span><span class="s2">&quot;ACKNOWLEDGED&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">[</span><span class="s2">&quot;HAS-INPUT&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">frame</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;Input: &#39;&quot;</span> <span class="o">+</span> <span class="n">tmr</span><span class="o">.</span><span class="n">sentence</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_decision</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">agenda</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agenda</span><span class="p">()</span>
+
+        <span class="n">priority_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">[</span><span class="s2">&quot;PRIORITY_WEIGHT&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>
+        <span class="n">resources_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">[</span><span class="s2">&quot;RESOURCES_WEIGHT&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">singleton</span><span class="p">()</span>
+
+        <span class="n">decision</span> <span class="o">=</span> <span class="o">-</span><span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">goal</span> <span class="ow">in</span> <span class="n">agenda</span><span class="o">.</span><span class="n">goals</span><span class="p">(</span><span class="n">pending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">goal</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">Goal</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PENDING</span><span class="p">)</span>
+            <span class="n">_priority</span> <span class="o">=</span> <span class="n">goal</span><span class="o">.</span><span class="n">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">_resources</span> <span class="o">=</span> <span class="n">goal</span><span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">_decision</span> <span class="o">=</span> <span class="p">(</span><span class="n">_priority</span> <span class="o">*</span> <span class="n">priority_weight</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">_resources</span> <span class="o">*</span> <span class="n">resources_weight</span><span class="p">)</span>
+            <span class="n">goal</span><span class="o">.</span><span class="n">decision</span><span class="p">(</span><span class="n">decide</span><span class="o">=</span><span class="n">_decision</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">_decision</span> <span class="o">&gt;</span> <span class="n">decision</span><span class="p">:</span>
+                <span class="n">decision</span> <span class="o">=</span> <span class="n">_decision</span>
+                <span class="n">selected</span> <span class="o">=</span> <span class="n">goal</span>
+
+        <span class="k">if</span> <span class="n">selected</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">selected</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">Goal</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">ACTIVE</span><span class="p">)</span>
+            <span class="n">agenda</span><span class="o">.</span><span class="n">prepare_action</span><span class="p">(</span><span class="n">selected</span><span class="o">.</span><span class="n">plan</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">goal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agenda</span><span class="p">()</span><span class="o">.</span><span class="n">goals</span><span class="p">(</span><span class="n">active</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agenda</span><span class="p">()</span><span class="o">.</span><span class="n">action</span><span class="p">()</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="n">goal</span><span class="p">)</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">agenda</span><span class="p">()</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="s2">&quot;ACTION-TO-TAKE&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_assess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">active</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agenda</span><span class="p">()</span><span class="o">.</span><span class="n">goals</span><span class="p">():</span>
+            <span class="n">active</span><span class="o">.</span><span class="n">assess</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">agenda</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Agenda</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pending_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">input</span><span class="o">.</span><span class="n">resolve</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity</span><span class="p">[</span><span class="s2">&quot;HAS-INPUT&quot;</span><span class="p">])</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">input</span><span class="p">[</span><span class="s2">&quot;ACKNOWLEDGED&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">input</span><span class="p">[</span><span class="s2">&quot;REFERS-TO-GRAPH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">singleton</span><span class="p">(),</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="nb">input</span><span class="p">:</span> <span class="bp">self</span><span class="p">[</span><span class="nb">input</span><span class="p">],</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_bootstrap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="kn">from</span> <span class="nn">backend.models.bootstrap</span> <span class="k">import</span> <span class="n">Bootstrap</span>
+        <span class="n">Bootstrap</span><span class="o">.</span><span class="n">bootstrap_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;backend.resources&quot;</span><span class="p">,</span> <span class="s2">&quot;goals.aa&quot;</span><span class="p">)</span>
+        <span class="n">Bootstrap</span><span class="o">.</span><span class="n">bootstrap_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;backend.resources&quot;</span><span class="p">,</span> <span class="s2">&quot;bootstrap.knowledge&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agenda</span><span class="p">()</span><span class="o">.</span><span class="n">add_goal</span><span class="p">(</span><span class="n">Goal</span><span class="o">.</span><span class="n">instance_of</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">internal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">exe</span><span class="p">[</span><span class="s2">&quot;FIND-SOMETHING-TO-DO&quot;</span><span class="p">],</span> <span class="p">[]))</span>
+
+        <span class="kn">from</span> <span class="nn">backend.models.mps</span> <span class="k">import</span> <span class="n">MPRegistry</span>
+
+        <span class="k">def</span> <span class="nf">understand_input</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">tmr_frame</span><span class="p">):</span>
+            <span class="n">tmr</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">tmr_frame</span><span class="p">[</span><span class="s2">&quot;REFERS-TO-GRAPH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">singleton</span><span class="p">()]</span>
+            <span class="n">agenda</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">default_understanding</span><span class="p">()</span>
+            <span class="n">agenda</span><span class="o">.</span><span class="n">logger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_logger</span><span class="p">)</span>
+            <span class="n">agenda</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmr</span><span class="p">)</span>
+
+        <span class="n">MPRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">understand_input</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">prioritize_learning</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">tmr_frame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="mf">0.75</span>
+        <span class="n">MPRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">prioritize_learning</span><span class="p">)</span></div>
+
+
+        <span class="c1"># API declared versions of the two goal definitions</span>
+
+        <span class="c1"># graph = self[&quot;EXE&quot;]</span>
+
+        <span class="c1"># goal1 = Goal.define(graph, &quot;FIND-SOMETHING-TO-DO&quot;, 0.1, [</span>
+        <span class="c1">#     Action.build(graph,</span>
+        <span class="c1">#                  &quot;acknowledge input&quot;,</span>
+        <span class="c1">#                  ExistsStatement.instance(graph, Query.parse(self, &quot;WHERE (@^ EXE.INPUT-TMR AND ACKNOWLEDGED = False)&quot;)),</span>
+        <span class="c1">#                  ForEachStatement.instance(graph, Query.parse(self, &quot;WHERE (@^ EXE.INPUT-TMR AND ACKNOWLEDGED = False)&quot;), &quot;$tmr&quot;,  [</span>
+        <span class="c1">#                      AddFillerStatement.instance(graph, self.identity, &quot;HAS-GOAL&quot;,</span>
+        <span class="c1">#                                                  MakeInstanceStatement.instance(graph, &quot;SELF&quot;, &quot;EXE.UNDERSTAND-TMR&quot;, [&quot;$tmr&quot;])),</span>
+        <span class="c1">#                      AssignFillerStatement.instance(graph, &quot;$tmr&quot;, &quot;ACKNOWLEDGED&quot;, True)</span>
+        <span class="c1">#                      ])</span>
+        <span class="c1">#                  ),</span>
+        <span class="c1">#     Action.build(graph, &quot;idle&quot;, Action.DEFAULT, Action.IDLE)</span>
+        <span class="c1"># ], [], [])</span>
+
+        <span class="c1"># goal2 = Goal.define(graph, &quot;UNDERSTAND-TMR&quot;, 0.9, [</span>
+        <span class="c1">#     Action.build(graph,</span>
+        <span class="c1">#                  &quot;understand&quot;,</span>
+        <span class="c1">#                  Action.DEFAULT,</span>
+        <span class="c1">#                  [</span>
+        <span class="c1">#                      MeaningProcedureStatement.instance(graph, &quot;understand_input&quot;, [&quot;$tmr&quot;]),</span>
+        <span class="c1">#                      AssignFillerStatement.instance(graph, &quot;$tmr&quot;, &quot;STATUS&quot;, Literal(&quot;UNDERSTOOD&quot;))</span>
+        <span class="c1">#                  ])</span>
+        <span class="c1"># ], [</span>
+        <span class="c1">#     Condition.build(graph,</span>
+        <span class="c1">#                     [IsStatement.instance(graph, &quot;$tmr&quot;, &quot;STATUS&quot;, Literal(&quot;UNDERSTOOD&quot;))],</span>
+        <span class="c1">#                     Goal.Status.SATISFIED)</span>
+        <span class="c1"># ], [&quot;$tmr&quot;])</span>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jesse English &amp; Ivan Leon
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'1.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

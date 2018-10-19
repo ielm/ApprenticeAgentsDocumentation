@@ -2,7 +2,6 @@ Core
 ====
 
 ..  toctree::
-    :caption: Core
     :maxdepth: 2
 
     agent
@@ -12,7 +11,6 @@ Contexts
 ========
 
 ..  toctree::
-    :caption: Contexts
     :maxdepth: 2
 
     contexts/context
@@ -23,7 +21,6 @@ Heuristics
 ==========
 
 ..  toctree::
-    :caption: Heuristics
     :maxdepth: 2
 
     heuristics/actcontext/act_agenda_heuristic
@@ -36,7 +33,6 @@ Models
 ======
 
 ..  toctree::
-    :caption: Models
     :maxdepth: 2
 
     models/agenda
@@ -57,7 +53,6 @@ Services
 ========
 
 ..  toctree::
-    :caption: Services
     :maxdepth: 2
 
     services/environment
@@ -66,7 +61,6 @@ Utils
 =====
 
 ..  toctree::
-    :caption: Utils
     :maxdepth: 2
 
     utils/AgentLogger

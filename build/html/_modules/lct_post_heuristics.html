@@ -1,0 +1,472 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lct_post_heuristics &mdash; Apprentice Agents 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apprentice Agents
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/LEIAServices.html">LEIA Services</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Agent Capabilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Code Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#contexts">Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#heuristics">Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#models">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#services">Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#utils">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../help/help.html">Need Help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apprentice Agents</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>lct_post_heuristics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lct_post_heuristics</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">backend.contexts.context</span> <span class="k">import</span> <span class="n">HeuristicException</span><span class="p">,</span> <span class="n">UnderstandingProcessor</span>
+<span class="kn">from</span> <span class="nn">backend.models.fr</span> <span class="k">import</span> <span class="n">FRInstance</span>
+<span class="kn">from</span> <span class="nn">backend.models.graph</span> <span class="k">import</span> <span class="n">Frame</span>
+<span class="kn">from</span> <span class="nn">backend.utils</span> <span class="k">import</span> <span class="n">FRUtils</span>
+
+
+<span class="c1"># ------ Post-Heuristics -------</span>
+
+<span class="c1"># Identifies when an utterance is specifying a precondition (and not some specific action to be taken).</span>
+<span class="c1"># Example: I need a screwdriver to assemble a chair.</span>
+<span class="c1"># If the main event of the TMR has a PURPOSE, find any LCT.learning frames with matching important</span>
+<span class="c1"># case-roles to the PURPOSE, and add the main event as a PRECONDITION to those results.</span>
+<div class="viewcode-block" id="IdentifyPreconditionsUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_post_heuristics.html#lct_post_heuristics.IdentifyPreconditionsUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">IdentifyPreconditionsUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_prefix</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+            <span class="n">fr_event</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">event</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">fr_event</span><span class="p">[</span><span class="s2">&quot;PURPOSE&quot;</span><span class="p">]:</span>
+                <span class="n">purpose</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+                <span class="n">q</span> <span class="o">=</span> <span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+                <span class="n">case_roles_to_match</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AGENT&quot;</span><span class="p">,</span> <span class="s2">&quot;THEME&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">case_roles_to_match</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cr</span> <span class="ow">in</span> <span class="n">purpose</span><span class="p">:</span>
+                        <span class="n">q</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">cr</span><span class="p">,</span> <span class="n">purpose</span><span class="p">[</span><span class="n">cr</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
+
+                <span class="n">results</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;PRECONDITION&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">fr_event</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">halt_siblings</span><span class="p">()</span>
+                <span class="k">return</span>
+
+        <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span></div>
+
+
+<span class="c1"># Identifies when an utterance is requesting a simple action (the LCT.current does not have to move).</span>
+<span class="c1"># Example: Get a screwdriver.</span>
+<span class="c1"># If the main event of the TMR is a REQUEST-ACTION, and the ROBOT is the BENEFICIARY, then add the event&#39;s THEMEs</span>
+<span class="c1"># to the HAS-EVENT-AS-PART slot of the LCT.learning / LCT.current event (but do not change LCT.current).</span>
+<div class="viewcode-block" id="HandleRequestedActionsUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_post_heuristics.html#lct_post_heuristics.HandleRequestedActionsUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">HandleRequestedActionsUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_prefix</span><span class="p">()</span> <span class="ow">or</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+        <span class="n">fr_event</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">event</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fr_themes</span> <span class="o">=</span> <span class="n">fr_event</span><span class="p">[</span><span class="s2">&quot;THEME&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">event</span> <span class="o">^</span> <span class="n">agent</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="s2">&quot;REQUEST-ACTION&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;ROBOT&quot;</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;BENEFICIARY&quot;</span><span class="p">]:</span>
+            <span class="n">fr_currently_learning_events</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">fr_current_event</span> <span class="ow">in</span> <span class="n">fr_currently_learning_events</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">theme</span> <span class="ow">in</span> <span class="n">fr_themes</span><span class="p">:</span>
+                    <span class="n">fr_current_event</span><span class="p">[</span><span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">theme</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">halt_siblings</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span></div>
+
+
+<span class="c1"># Identifies actions that are happening &quot;now&quot; (not pre- or postfix), and adds them as children of the current</span>
+<span class="c1"># learning context.  This is similar to HandleRequestedActionsUnderstandingProcessor, without the mapping to the</span>
+<span class="c1"># the THEME of the main event (the main event itself is assumed to be the learned event).</span>
+<span class="c1"># Example: I am using the screwdriver to affix the brackets on the dowel with screws.</span>
+<div class="viewcode-block" id="HandleCurrentActionUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_post_heuristics.html#lct_post_heuristics.HandleCurrentActionUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">HandleCurrentActionUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_prefix</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+            <span class="n">fr_event</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">event</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">fr_currently_learning_events</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">fr_current_event</span> <span class="ow">in</span> <span class="n">fr_currently_learning_events</span><span class="p">:</span>
+                <span class="n">fr_current_event</span><span class="p">[</span><span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">fr_event</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">halt_siblings</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span></div>
+
+
+<span class="c1"># Identifies when an utterance is exposing a new complex sub-event (this will result in LCT.current changing).</span>
+<span class="c1"># Example: First, we will build a front leg of the chair.</span>
+<span class="c1"># This is considered the default (fallback) heuristic for PREFIX TMRs.  That is, if all other PREFIX heuristics</span>
+<span class="c1"># fail to match, this action is taken:</span>
+<span class="c1">#   Find the LCT.learning / LCT.current fr event, and add this main event to the HAS-EVENT-AS-PART slot.  Then,</span>
+<span class="c1">#   set the LCT.current to False, the LCT.waiting_on to this main event, assign LCT.current and LCT.learning to</span>
+<span class="c1">#   this main event.</span>
+<div class="viewcode-block" id="RecognizeSubEventsUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_post_heuristics.html#lct_post_heuristics.RecognizeSubEventsUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">RecognizeSubEventsUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_prefix</span><span class="p">():</span>
+            <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+            <span class="n">fr_event</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">event</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">fr_currently_learning_events</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+                <span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">fr_current_event</span> <span class="ow">in</span> <span class="n">fr_currently_learning_events</span><span class="p">:</span>
+                <span class="n">fr_current_event</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">fr_current_event</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">WAITING_ON</span><span class="p">]</span> <span class="o">=</span> <span class="n">fr_event</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+                <span class="n">fr_current_event</span><span class="p">[</span><span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">fr_event</span>
+
+            <span class="n">fr_event</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">fr_event</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">halt_siblings</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span></div>
+
+
+<span class="c1"># Identifies when an utterance is specifying that some previous tasks were a part of an undisclosed task that is</span>
+<span class="c1"># now complete.</span>
+<span class="c1"># Example: We have assembled a front leg.</span>
+<span class="c1">#          (Assuming that &quot;First, we will build a front leg of the chair.&quot; was not uttered).</span>
+<span class="c1"># To match, the following must be true:</span>
+<span class="c1"># 1) The TMR is postfix.</span>
+<span class="c1"># 2) There is an existing event being learned (at least an LCT.current)</span>
+<span class="c1"># 3) There is no event being learned that is the same concept as the main event, and shares the same THEME</span>
+<span class="c1">#    (concept match only).</span>
+<span class="c1"># If the criteria match, the main event will be added as a child of the LCT.current; any children of the LCT.current</span>
+<span class="c1"># that are not complex events (do not have HAS-EVENT-AS-PART) will be moved to be children of the main event.</span>
+<div class="viewcode-block" id="IdentifyClosingOfUnknownTaskUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_post_heuristics.html#lct_post_heuristics.IdentifyClosingOfUnknownTaskUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">IdentifyClosingOfUnknownTaskUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+        <span class="n">fr_event</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">event</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">hierarchy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">learning_hierarchy</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hierarchy</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">learning</span> <span class="ow">in</span> <span class="n">hierarchy</span><span class="p">:</span>
+            <span class="n">learning</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="p">[</span><span class="n">learning</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">learning</span><span class="o">.</span><span class="n">concept</span><span class="p">()</span> <span class="o">!=</span> <span class="n">fr_event</span><span class="o">.</span><span class="n">concept</span><span class="p">():</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">FRUtils</span><span class="o">.</span><span class="n">comparator</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="p">,</span> <span class="n">fr_event</span><span class="p">,</span> <span class="n">learning</span><span class="p">,</span> <span class="s2">&quot;THEME&quot;</span><span class="p">,</span> <span class="n">compare_concepts</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">current</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="p">[</span><span class="n">hierarchy</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">child</span><span class="p">:</span> <span class="n">child</span><span class="o">.</span><span class="n">resolve</span><span class="p">(),</span> <span class="n">current</span><span class="p">[</span><span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span><span class="p">]))</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">child</span><span class="p">:</span> <span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">child</span><span class="p">,</span> <span class="n">children</span><span class="p">))</span>
+
+        <span class="n">current</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">current</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">WAITING_ON</span><span class="p">]</span> <span class="o">=</span> <span class="n">fr_event</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+        <span class="n">current</span><span class="p">[</span><span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">fr_event</span>
+
+        <span class="n">fr_event</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">fr_event</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">CURRENT</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+            <span class="n">current</span><span class="p">[</span><span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">child</span>
+            <span class="n">fr_event</span><span class="p">[</span><span class="s2">&quot;HAS-EVENT-AS-PART&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">child</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">finish_learning</span><span class="p">(</span><span class="n">fr_event</span><span class="o">.</span><span class="n">name</span><span class="p">())</span></div>
+
+
+<span class="c1"># Identifies when a TMR is about a currently learning BUILD event.  If so, anything the TMR is building is added</span>
+<span class="c1"># as a part of anything that any parent learning event is also building.</span>
+<span class="c1"># Example: First, we will build a front leg of [the chair].</span>
+<span class="c1">#          I am using the screwdriver to affix [the brackets] on [the dowel] with screws.</span>
+<span class="c1"># This is designed to run as a sub-heuristic to detecting sub-events.  To match, the following must happen:</span>
+<span class="c1"># 1) The main event is a BUILD event</span>
+<span class="c1"># 2) The main event is LCT.learning</span>
+<span class="c1"># 3) The main event has one or more &quot;parts&quot; (that is, THEMEs and DESTINATIONs that are OBJECTs)</span>
+<span class="c1"># 4) The candidate events are LCT.learning and are LCT.waiting_on the main event</span>
+<span class="c1"># 5) The candidate event is a BUILD event</span>
+<span class="c1"># 6) The candidate event has exactly one THEME</span>
+<span class="c1"># If the above match, add all parts as HAS-OBJECT-AS-PART to the candidate THEME</span>
+<div class="viewcode-block" id="RecognizePartsOfObjectUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_post_heuristics.html#lct_post_heuristics.RecognizePartsOfObjectUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">RecognizePartsOfObjectUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+        <span class="n">fr_event</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">event</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">parts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">theme</span><span class="p">:</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">isa</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="s2">&quot;OBJECT&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">resolve</span><span class="p">())),</span>
+                <span class="n">event</span><span class="p">[</span><span class="s2">&quot;THEME&quot;</span><span class="p">]))</span>
+        <span class="n">parts</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">theme</span><span class="p">:</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">isa</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="s2">&quot;OBJECT&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="n">FRInstance</span><span class="o">.</span><span class="n">ATTRIBUTED_TO</span><span class="p">,</span> <span class="n">theme</span><span class="o">.</span><span class="n">resolve</span><span class="p">())),</span>
+                <span class="n">event</span><span class="p">[</span><span class="s2">&quot;DESTINATION&quot;</span><span class="p">]))</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">sublist</span> <span class="ow">in</span> <span class="n">parts</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">sublist</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">fr_event</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fr_event</span> <span class="o">^</span> <span class="n">agent</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="s2">&quot;BUILD&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">isa</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="s2">&quot;BUILD&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="s2">&quot;THEME&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">WAITING_ON</span><span class="p">,</span> <span class="n">fr_event</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">theme</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;THEME&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">:</span>
+                <span class="n">theme</span><span class="p">[</span><span class="s2">&quot;HAS-OBJECT-AS-PART&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">part</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jesse English &amp; Ivan Leon
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'1.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

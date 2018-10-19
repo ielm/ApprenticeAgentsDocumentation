@@ -84,29 +84,22 @@
 </ul>
 <p class="caption"><span class="caption-text">Agent Capabilities</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Code Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../agent.html">Agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../service.html">Service</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Context</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ACTContext.html">ACTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="LCTContext.html">LCTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../heuristics/actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../heuristics/lctcontext/lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../heuristics/lctcontext/lct_fr_resolution_heuristics.html">LCT FR Resolution Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../heuristics/lctcontext/lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../heuristics/lctcontext/lct_post_heuristics.html">LCT Post Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../models/agenda.html">Agenda</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../models/fr.html">Fact Repository</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../models/grammar.html">Grammar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../services/environment.html">Environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utils/AgentLogger.html">Agent Logger</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utils/AtomicCounter.html">Atomic Counter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utils/FRUtils.html">FR Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../utils/YaleUtils.html">Yale Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cindex.html">Core</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../cindex.html#contexts">Contexts</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ACTContext.html">ACTContext</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LCTContext.html">LCTContext</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cindex.html#heuristics">Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cindex.html#models">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cindex.html#services">Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cindex.html#utils">Utils</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Help</span></p>
 <ul>
@@ -156,7 +149,7 @@
     
       <li><a href="../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../cindex.html">&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="../cindex.html">Core</a> &raquo;</li>
         
       <li>Context</li>
     
@@ -177,8 +170,157 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="context">
-<h1>Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-context">
+<span id="context"></span><h1>Context<a class="headerlink" href="#module-context" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="context.AgentContext">
+<em class="property">class </em><code class="descclassname">context.</code><code class="descname">AgentContext</code><span class="sig-paren">(</span><em>agent</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#AgentContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.AgentContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Agent Context</p>
+<dl class="method">
+<dt id="context.AgentContext.default_understanding">
+<code class="descname">default_understanding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#AgentContext.default_understanding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.AgentContext.default_understanding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default Understanding Template</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.AgentContext.prepare_static_knowledge">
+<code class="descname">prepare_static_knowledge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#AgentContext.prepare_static_knowledge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.AgentContext.prepare_static_knowledge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare Static Knowledge Template</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="context.FRResolutionUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">context.</code><code class="descname">FRResolutionUnderstandingProcessor</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#FRResolutionUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.FRResolutionUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fact Repository Resolution Understanding Processor</p>
+<dl class="method">
+<dt id="context.FRResolutionUnderstandingProcessor.log">
+<code class="descname">log</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#FRResolutionUnderstandingProcessor.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.FRResolutionUnderstandingProcessor.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs a message</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> – Message to log</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="context.HeuristicException">
+<em class="property">exception </em><code class="descclassname">context.</code><code class="descname">HeuristicException</code><a class="reference internal" href="../../_modules/context.html#HeuristicException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.HeuristicException" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="context.RootUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">context.</code><code class="descname">RootUnderstandingProcessor</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#RootUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.RootUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Root Understanding Processor</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="context.UnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">context.</code><code class="descname">UnderstandingProcessor</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#UnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.UnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Understanding Processor</p>
+<dl class="method">
+<dt id="context.UnderstandingProcessor.add_subprocess">
+<code class="descname">add_subprocess</code><span class="sig-paren">(</span><em>subprocess</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#UnderstandingProcessor.add_subprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.UnderstandingProcessor.add_subprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds subprocess to Understanding Processor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subprocess</strong> – Subprocess to add</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.UnderstandingProcessor.halt_siblings">
+<code class="descname">halt_siblings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#UnderstandingProcessor.halt_siblings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.UnderstandingProcessor.halt_siblings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Halts sibling processors</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.UnderstandingProcessor.log">
+<code class="descname">log</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#UnderstandingProcessor.log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.UnderstandingProcessor.log" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> – Message to log</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.UnderstandingProcessor.logger">
+<code class="descname">logger</code><span class="sig-paren">(</span><em>logger=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#UnderstandingProcessor.logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.UnderstandingProcessor.logger" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>logger</strong> – Agent Logger</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.UnderstandingProcessor.process">
+<code class="descname">process</code><span class="sig-paren">(</span><em>agent</em>, <em>tmr</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#UnderstandingProcessor.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.UnderstandingProcessor.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process input with Understanding Processor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>agent</strong> – Agent</li>
+<li><strong>tmr</strong> – TMR to process</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="context.UnderstandingProcessor.reassign_siblings">
+<code class="descname">reassign_siblings</code><span class="sig-paren">(</span><em>siblings</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/context.html#UnderstandingProcessor.reassign_siblings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#context.UnderstandingProcessor.reassign_siblings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reassign siblings to parent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>siblings</strong> – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

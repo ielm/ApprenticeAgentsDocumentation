@@ -84,29 +84,24 @@
 </ul>
 <p class="caption"><span class="caption-text">Agent Capabilities</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Code Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../agent.html">Agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../service.html">Service</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contexts/context.html">Context</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contexts/ACTContext.html">ACTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contexts/LCTContext.html">LCTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lct_fr_resolution_heuristics.html">LCT FR Resolution Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">LCT Post Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../models/agenda.html">Agenda</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../models/fr.html">Fact Repository</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../models/grammar.html">Grammar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../services/environment.html">Environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/AgentLogger.html">Agent Logger</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/AtomicCounter.html">Atomic Counter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/FRUtils.html">FR Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/YaleUtils.html">Yale Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#contexts">Contexts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../cindex.html#heuristics">Heuristics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lct_fr_resolution_heuristics.html">LCT FR Resolution Heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">LCT Post Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#models">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#services">Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#utils">Utils</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Help</span></p>
 <ul>
@@ -156,7 +151,7 @@
     
       <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../../cindex.html">&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="../../cindex.html">Core</a> &raquo;</li>
         
       <li>LCT Post Heuristics</li>
     
@@ -177,8 +172,38 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="lct-post-heuristics">
-<h1>LCT Post Heuristics<a class="headerlink" href="#lct-post-heuristics" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-lct_post_heuristics">
+<span id="lct-post-heuristics"></span><h1>LCT Post Heuristics<a class="headerlink" href="#module-lct_post_heuristics" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="lct_post_heuristics.HandleCurrentActionUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">lct_post_heuristics.</code><code class="descname">HandleCurrentActionUnderstandingProcessor</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_post_heuristics.html#HandleCurrentActionUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_post_heuristics.HandleCurrentActionUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="lct_post_heuristics.HandleRequestedActionsUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">lct_post_heuristics.</code><code class="descname">HandleRequestedActionsUnderstandingProcessor</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_post_heuristics.html#HandleRequestedActionsUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_post_heuristics.HandleRequestedActionsUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="lct_post_heuristics.IdentifyClosingOfUnknownTaskUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">lct_post_heuristics.</code><code class="descname">IdentifyClosingOfUnknownTaskUnderstandingProcessor</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_post_heuristics.html#IdentifyClosingOfUnknownTaskUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_post_heuristics.IdentifyClosingOfUnknownTaskUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="lct_post_heuristics.IdentifyPreconditionsUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">lct_post_heuristics.</code><code class="descname">IdentifyPreconditionsUnderstandingProcessor</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_post_heuristics.html#IdentifyPreconditionsUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_post_heuristics.IdentifyPreconditionsUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="lct_post_heuristics.RecognizePartsOfObjectUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">lct_post_heuristics.</code><code class="descname">RecognizePartsOfObjectUnderstandingProcessor</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_post_heuristics.html#RecognizePartsOfObjectUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_post_heuristics.RecognizePartsOfObjectUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="lct_post_heuristics.RecognizeSubEventsUnderstandingProcessor">
+<em class="property">class </em><code class="descclassname">lct_post_heuristics.</code><code class="descname">RecognizeSubEventsUnderstandingProcessor</code><span class="sig-paren">(</span><em>context</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_post_heuristics.html#RecognizeSubEventsUnderstandingProcessor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_post_heuristics.RecognizeSubEventsUnderstandingProcessor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 

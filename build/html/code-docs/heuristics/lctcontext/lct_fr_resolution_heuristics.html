@@ -84,29 +84,24 @@
 </ul>
 <p class="caption"><span class="caption-text">Agent Capabilities</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Code Documentation</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../agent.html">Agent</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../service.html">Service</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contexts/context.html">Context</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contexts/ACTContext.html">ACTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contexts/LCTContext.html">LCTContext</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">LCT FR Resolution Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lct_post_heuristics.html">LCT Post Heuristics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../models/agenda.html">Agenda</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../models/fr.html">Fact Repository</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../models/grammar.html">Grammar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../services/environment.html">Environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/AgentLogger.html">Agent Logger</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/AtomicCounter.html">Atomic Counter</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/FRUtils.html">FR Utils</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../utils/YaleUtils.html">Yale Utils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#contexts">Contexts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../cindex.html#heuristics">Heuristics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../actcontext/act_agenda_heuristic.html">ACT Agenda Heuristic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lct_fr_import_heuristics.html">LCT FR Import Heuristics</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">LCT FR Resolution Heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lct_pre_heuristics.html">LCT Pre Heuristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lct_post_heuristics.html">LCT Post Heuristics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#models">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#services">Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cindex.html#utils">Utils</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Help</span></p>
 <ul>
@@ -156,7 +151,7 @@
     
       <li><a href="../../../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../../cindex.html">&lt;no title&gt;</a> &raquo;</li>
+          <li><a href="../../cindex.html">Core</a> &raquo;</li>
         
       <li>LCT FR Resolution Heuristics</li>
     
@@ -177,8 +172,93 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="lct-fr-resolution-heuristics">
-<h1>LCT FR Resolution Heuristics<a class="headerlink" href="#lct-fr-resolution-heuristics" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-lct_fr_resolution_heuristics">
+<span id="lct-fr-resolution-heuristics"></span><h1>LCT FR Resolution Heuristics<a class="headerlink" href="#module-lct_fr_resolution_heuristics" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="lct_fr_resolution_heuristics.FRResolveLearningEvents">
+<em class="property">class </em><code class="descclassname">lct_fr_resolution_heuristics.</code><code class="descname">FRResolveLearningEvents</code><span class="sig-paren">(</span><em>fr</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_fr_resolution_heuristics.html#FRResolveLearningEvents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_fr_resolution_heuristics.FRResolveLearningEvents" title="Permalink to this definition">¶</a></dt>
+<dd><p>FR resolution method for resolving EVENTs against currently learning FR events.
+Example: First, we will build a front leg of the chair.  We [have assembled] a front leg.
+To be a match, the following must be true:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>The instance must be an EVENT</li>
+<li>A candidate in the FR must be the same concept as the instance</li>
+<li>A candidate in the FR must be LTC.learning</li>
+<li>A candidate in the FR must have at least one <em>resolved</em> match for each case-role filler specified by
+the instance.  (Currently, this includes only AGENT and THEME).  That is, if “AGENT” is defined in the
+instance, that filler must a) be resolved, and b) be equal to one of the AGENT fillers in the candidate.</li>
+</ol>
+</div></blockquote>
+</dd></dl>
+
+<dl class="class">
+<dt id="lct_fr_resolution_heuristics.FRResolveUndeterminedThemesOfLearning">
+<em class="property">class </em><code class="descclassname">lct_fr_resolution_heuristics.</code><code class="descname">FRResolveUndeterminedThemesOfLearning</code><span class="sig-paren">(</span><em>fr</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_fr_resolution_heuristics.html#FRResolveUndeterminedThemesOfLearning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_fr_resolution_heuristics.FRResolveUndeterminedThemesOfLearning" title="Permalink to this definition">¶</a></dt>
+<dd><p>FR resolution method used to connect an instance that is undetermined (“a chair” rather than “the chair”) to an
+existing FR instance by looking for instances that are the “themes of learning” (in other words, what is currently
+being learned).
+Example: We will build a chair.  I need a screwdriver to assemble [a chair].</p>
+<blockquote>
+<div>The 2nd instance of “a chair” would typically not be connected to the first, due to the lack of a determiner.
+However, as the first usage of “a chair” kicked off a theme of learning (that is still active), we are more
+flexible with resolution.</div></blockquote>
+<dl class="docutils">
+<dt>To do this:</dt>
+<dd><ol class="first last arabic simple">
+<li>The instance to resolve must be an OBJECT</li>
+<li>The instance to resolve must be undetermined (“a chair”)</li>
+<li>The instance must be the THEME of an EVENT that also has a PURPOSE, which must be another EVENT</li>
+<li>If so, then any corresponding concept match in the FR is a valid resolution
+Note, this last match is a little broad, but is ok in that this resolution heuristic operates in short-term
+memory only.</li>
+</ol>
+</dd>
+</dl>
+<dl class="method">
+<dt id="lct_fr_resolution_heuristics.FRResolveUndeterminedThemesOfLearning.resolve">
+<code class="descname">resolve</code><span class="sig-paren">(</span><em>instance</em>, <em>resolves</em>, <em>tmr=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_fr_resolution_heuristics.html#FRResolveUndeterminedThemesOfLearning.resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_fr_resolution_heuristics.FRResolveUndeterminedThemesOfLearning.resolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resolve Undetermined Themes of Learning</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>instance</strong> – </li>
+<li><strong>resolves</strong> – </li>
+<li><strong>tmr</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="lct_fr_resolution_heuristics.FRResolveUndeterminedThemesOfLearningInPostfix">
+<em class="property">class </em><code class="descclassname">lct_fr_resolution_heuristics.</code><code class="descname">FRResolveUndeterminedThemesOfLearningInPostfix</code><span class="sig-paren">(</span><em>fr</em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/lct_fr_resolution_heuristics.html#FRResolveUndeterminedThemesOfLearningInPostfix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lct_fr_resolution_heuristics.FRResolveUndeterminedThemesOfLearningInPostfix" title="Permalink to this definition">¶</a></dt>
+<dd><p>FR resolution method for identifying that an undetermined (“a chair”) object that is the THEME of a
+resolved EVENT that is currently being learned, is the same THEME as other similar types of THEMEs found
+in the resolved EVENT, if the TMR is postfix.
+Example: First, we will build a front leg of the chair.  We have assembled [a front leg].
+To match, the following must be true:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>The TMR must be in postfix (“we have”)</li>
+<li>The instance must be an OBJECT</li>
+<li>The instance must be undetermined (“a chair”)</li>
+<li>The instance must be a THEME-OF an EVENT in the TMR</li>
+<li>That EVENT must be found (roughly resolved) in the FR by concept match, AND as LCT.learning</li>
+<li>For each THEME of the matching FR EVENT, any that are the same concept as the instance are resolved matches</li>
+</ol>
+</div></blockquote>
+</dd></dl>
+
 </div>
 
 

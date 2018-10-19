@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>lct_pre_heuristics &mdash; Apprentice Agents 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Apprentice Agents
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/LEIAServices.html">LEIA Services</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Agent Capabilities</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/ContextAwareProcessing.html">Context Aware Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agent-capabilities/AgentHeuristics.html">Agent Heuristics</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Code Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html">Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#contexts">Contexts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#heuristics">Heuristics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#models">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#services">Services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code-docs/cindex.html#utils">Utils</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../help/help.html">Need Help?</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Apprentice Agents</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>lct_pre_heuristics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for lct_pre_heuristics</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">backend.contexts.context</span> <span class="k">import</span> <span class="n">HeuristicException</span><span class="p">,</span> <span class="n">FRResolutionUnderstandingProcessor</span><span class="p">,</span> <span class="n">UnderstandingProcessor</span>
+<span class="kn">from</span> <span class="nn">backend.heuristics.fr_heuristics</span> <span class="k">import</span> <span class="n">FRResolveHumanAndRobotAsSingletonsHeuristic</span><span class="p">,</span> <span class="n">FRResolveSetsWithIdenticalMembersHeuristic</span>
+<span class="kn">from</span> <span class="nn">backend.heuristics.lctcontext.lct_fr_import_heuristics</span> <span class="k">import</span> <span class="n">FRImportDoNotImportRequestActions</span>
+<span class="kn">from</span> <span class="nn">backend.models.graph</span> <span class="k">import</span> <span class="n">Frame</span>
+
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># ------ Pre-Heuristics -------</span>
+
+
+<span class="c1"># Identifies when an utterance is specifying that an already mentioned task or sub-event is now complete.</span>
+<span class="c1"># Example: We have assembled a front leg.</span>
+<span class="c1"># If the postfix TMR can resolve the main event to the FR, and the resolved event is currently being learned,</span>
+<span class="c1"># it is now complete (and all subtasks below it are also completed; any parent task it has is considered current).</span>
+<span class="c1"># Finding a match necessarily removes the LEARN_ST_MEMORY and POST_PROCESS agent events as this TMR has been</span>
+<span class="c1"># consumed.</span>
+<div class="viewcode-block" id="IdentifyClosingOfKnownTaskUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_pre_heuristics.html#lct_pre_heuristics.IdentifyClosingOfKnownTaskUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">IdentifyClosingOfKnownTaskUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+
+            <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">pause</span><span class="p">()</span>
+            <span class="n">resolved</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">resolve_tmr</span><span class="p">(</span><span class="n">tmr</span><span class="p">)</span>
+            <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">logger</span><span class="p">()</span><span class="o">.</span><span class="n">unpause</span><span class="p">()</span>
+
+            <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+            <span class="n">hierarchy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">learning_hierarchy</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">resolved</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">_identifier</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+            <span class="n">target</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">le</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hierarchy</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">le</span> <span class="ow">in</span> <span class="n">resolved</span><span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">_identifier</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="kc">False</span><span class="p">)]:</span>
+                    <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="p">[</span><span class="n">le</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">]:</span>
+                        <span class="n">target</span> <span class="o">=</span> <span class="n">index</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">target</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">finish_learning</span><span class="p">(</span><span class="n">hierarchy</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">target</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">halt_siblings</span><span class="p">()</span>
+                <span class="k">return</span>
+
+        <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span></div>
+
+
+<span class="c1"># Identifies when an utterance signals that the currently learning task (overall) is complete.</span>
+<span class="c1"># Example: We finished assembling the chair.</span>
+<span class="c1"># This holds true if:</span>
+<span class="c1"># 1) The TMR is postfix</span>
+<span class="c1"># 2) There is at least one LCT.learned event in working memory</span>
+<span class="c1"># 3) There are no LCT.learning events in working memory</span>
+<span class="c1"># If this heuristic matches, it will import working memory into long term memory, using the FR import heuristics</span>
+<span class="c1"># defined in this context, and then will clear working memory.</span>
+<div class="viewcode-block" id="IdentifyCompletedTaskUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_pre_heuristics.html#lct_pre_heuristics.IdentifyCompletedTaskUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">IdentifyCompletedTaskUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNED</span><span class="p">,</span> <span class="kc">True</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">Frame</span><span class="o">.</span><span class="n">q</span><span class="p">(</span><span class="n">agent</span><span class="p">)</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">LEARNING</span><span class="p">,</span> <span class="kc">True</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">cid</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">_storage</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">frame</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">FROM_CONTEXT</span><span class="p">]</span> <span class="o">=</span> <span class="n">cid</span>
+
+        <span class="n">agent</span><span class="o">.</span><span class="n">lt_memory</span><span class="o">.</span><span class="n">import_fr</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="p">,</span>
+                                  <span class="n">import_heuristics</span><span class="o">=</span><span class="p">[</span><span class="n">FRImportDoNotImportRequestActions</span><span class="p">],</span>
+                                  <span class="n">resolve_heuristics</span><span class="o">=</span><span class="p">[</span><span class="n">FRResolveHumanAndRobotAsSingletonsHeuristic</span><span class="p">,</span> <span class="n">FRResolveSetsWithIdenticalMembersHeuristic</span><span class="p">],</span>
+                                  <span class="p">)</span>
+        <span class="n">agent</span><span class="o">.</span><span class="n">wo_memory</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<span class="c1"># Identifies when an action is simply satisfying a precondition; if so, it is not &quot;learned&quot;, as the precondition</span>
+<span class="c1"># is already known.</span>
+<span class="c1"># Example: I need a screwdriver to assemble a chair.  [Get a screwdriver.]</span>
+<span class="c1"># To be a match, the following must be true:</span>
+<span class="c1"># 1) The TMR is current (not pre- or postfix).</span>
+<span class="c1"># 2) There must be previous input in the context (this cannot be the first TMR).</span>
+<span class="c1"># 3) The main event must be a REQUEST-ACTION with BENEFICIARY = ROBOT.</span>
+<span class="c1"># 4) The immediately previous TMR (last input) must have been current (not pre- or postfix).</span>
+<span class="c1"># 5) The previous TMR&#39;s main event must have a PURPOSE (this is currently the identifier of a precondition utterance).</span>
+<span class="c1"># 6) The theme of this TMR&#39;s REQUEST-ACTION.THEME must match the THEME of the previous TMR&#39;s main event (concept match only).</span>
+<span class="c1"># If the above hold, the input is skipped and all other heuristics are disabled.</span>
+<div class="viewcode-block" id="IdentifyPreconditionSatisfyingActionsUnderstandingProcessor"><a class="viewcode-back" href="../code-docs/heuristics/lctcontext/lct_pre_heuristics.html#lct_pre_heuristics.IdentifyPreconditionSatisfyingActionsUnderstandingProcessor">[docs]</a><span class="k">class</span> <span class="nc">IdentifyPreconditionSatisfyingActionsUnderstandingProcessor</span><span class="p">(</span><span class="n">UnderstandingProcessor</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">context</span>
+
+    <span class="k">def</span> <span class="nf">_logic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">tmr</span><span class="p">):</span>
+        <span class="c1"># print(&quot;\nTMR: \n&quot;, tmr.sentence)</span>
+
+        <span class="k">if</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_prefix</span><span class="p">()</span> <span class="ow">or</span> <span class="n">tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">agent</span><span class="o">.</span><span class="n">input_memory</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="c1"># Event is None; cannot find main event.</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span> <span class="o">^</span> <span class="n">agent</span><span class="o">.</span><span class="n">ontology</span><span class="p">[</span><span class="s2">&quot;REQUEST-ACTION&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;ROBOT&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;BENEFICIARY&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">previous_tmr</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">input_memory</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">previous_tmr</span><span class="o">.</span><span class="n">is_prefix</span><span class="p">()</span> <span class="ow">or</span> <span class="n">previous_tmr</span><span class="o">.</span><span class="n">is_postfix</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">previous_event</span> <span class="o">=</span> <span class="n">previous_tmr</span><span class="o">.</span><span class="n">find_main_event</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;PURPOSE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">previous_event</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;THEME&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span>
+
+        <span class="n">event</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;THEME&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+        <span class="n">themes</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s2">&quot;THEME&quot;</span><span class="p">]</span>
+        <span class="n">themes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">theme</span><span class="p">:</span> <span class="n">theme</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">concept</span><span class="p">(),</span> <span class="n">themes</span><span class="p">))</span>
+
+        <span class="n">previous_themes</span> <span class="o">=</span> <span class="n">previous_event</span><span class="p">[</span><span class="s2">&quot;THEME&quot;</span><span class="p">]</span>
+        <span class="n">previous_themes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">theme</span><span class="p">:</span> <span class="n">theme</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">concept</span><span class="p">(),</span> <span class="n">previous_themes</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">themes</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">previous_themes</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reassign_siblings</span><span class="p">([</span><span class="n">FRResolutionUnderstandingProcessor</span><span class="p">()])</span>
+            <span class="k">return</span>
+
+        <span class="k">raise</span> <span class="n">HeuristicException</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jesse English &amp; Ivan Leon
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'1.0.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
